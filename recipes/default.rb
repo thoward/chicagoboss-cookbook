@@ -16,3 +16,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+user "chicagoboss" do
+  comment "Chicago Boss"
+  home "/var/chicagoboss"
+  shell "/bin/bash"
+  system true
+end
+
+directory "/var/chicagoboss" do
+  owner "chicagoboss"
+  group "chicagoboss"
+  mode 00744
+  action :create
+end
+
+git "/var/chicagoboss" do
+  repository "git://github.com/evanmiller/ChicagoBoss.git"
+  reference "master"
+  user "chicagoboss"
+  group "chicagoboss"
+  action :checkout
+end
+
+bash "build_chicagoboss" do
+   cwd "/var/chicagoboss"
+   user "chicagoboss"
+   group "chicagoboss"
+   code 'make'
+end
