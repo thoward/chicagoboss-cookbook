@@ -17,31 +17,32 @@
 # limitations under the License.
 #
 
-user "chicagoboss" do
+user node['chicagoboss']['user'] do
   comment "Chicago Boss"
-  home "/var/chicagoboss"
-  shell "/bin/bash"
+  gid node['chicagoboss']['group']
+  home node['chicagoboss']['dir']
+  shell node['chicagoboss']['shell']
   system true
 end
 
-directory "/var/chicagoboss" do
-  owner "chicagoboss"
-  group "chicagoboss"
+directory node['chicagoboss']['dir'] do
+  owner node['chicagoboss']['user']
+  group node['chicagoboss']['group']
   mode 00744
   action :create
 end
 
-git "/var/chicagoboss" do
-  repository "git://github.com/evanmiller/ChicagoBoss.git"
-  reference "master"
-  user "chicagoboss"
-  group "chicagoboss"
+git node['chicagoboss']['dir'] do
+  repository node['chicagoboss']['repo']
+  reference node['chicagoboss']['branch']
+  user node['chicagoboss']['user']
+  group node['chicagoboss']['group']
   action :checkout
 end
 
 bash "build_chicagoboss" do
-   cwd "/var/chicagoboss"
-   user "chicagoboss"
-   group "chicagoboss"
+   cwd node['chicagoboss']['dir']
+   user node['chicagoboss']['user']
+   group node['chicagoboss']['group']
    code 'make'
 end
